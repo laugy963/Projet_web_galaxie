@@ -261,28 +261,21 @@ h2::after
 }
 #masse:focus{ outline: none; }
 
-/* Selecteur de couleur des particules */
-#inputCouleur{
-  -webkit-appearance: none;
-  appearance: none;
-  width: 40px; height: 28px;
-  border: 1px solid var(--panel-border-bright);
-  border-radius: 8px;
-  background: transparent;
-  cursor: pointer;
-  padding: 2px;
-  box-shadow: 0 0 12px rgba(124, 92, 255, 0.35);
-}
-#inputCouleur::-webkit-color-swatch-wrapper{ padding: 0; }
-#inputCouleur::-webkit-color-swatch{ border: none; border-radius: 6px; }
-#inputCouleur::-moz-color-swatch{ border: none; border-radius: 6px; }
-
-/* Boutons demarrer / stop : groupe */
+/* Boutons demarrer / stop / recommencer : groupe */
 #Bouton
 {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     margin-top: 16px;
+}
+
+/* Bouton recommencer : sur sa propre ligne, centre sous start/stop */
+#Bouton #Restartbouton
+{
+    flex-basis: 100%;
+    background: linear-gradient(135deg, var(--violet), var(--cyan));
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18), 0 6px 18px rgba(124, 92, 255, 0.35);
 }
 
 /* Style des boutons par defaut */

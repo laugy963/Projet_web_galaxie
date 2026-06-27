@@ -7,7 +7,6 @@
 // Constante permettant d'interagir avec le HTML et le CSS
 const canvas = document.getElementById("affichage");
 const ctx = canvas.getContext("2d");
-const inputCouleur = document.getElementById("inputCouleur");
 const masse = document.getElementById("masse");
 const slider = document.getElementById("slider");
 const Startbouton = document.getElementById("Startbouton");
@@ -173,7 +172,7 @@ canvas.ondblclick = function(event)
     let mouseX = event.pageX - canvas.offsetLeft;
     let mouseY = event.pageY - canvas.offsetTop;
     let masse = slider.value;
-    let color = inputCouleur.value;
+    let color = getRandomColor();
     let radius;
     if(masse < 10)
     {
@@ -246,28 +245,50 @@ function createBigParticule()
 }
 
 // Initialisation, particules au chargement de la pages
-slider.value = 250;
-particles.push(createBigParticule());
-for(let i = 1; i < nombreDeParticule; i++)
+function initSimulation()
 {
-    let masse = generateNumber(10, 100);
-    let radius = 0.0;
-    let ang = 2 * Math.PI * i / nombreDeParticule;
-    let color =  getRandomColor();
-    if(masse < 50)
+    particles = [];
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "rgba(4,5,13,1)"; // efface tout le canvas (fond du theme)
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    slider.value = 250;
+    particles.push(createBigParticule());
+    for(let i = 1; i < nombreDeParticule; i++)
     {
-        radius = generateNumber(50, 100);
+        let masse = generateNumber(10, 100);
+        let radius = 0.0;
+        let ang = 2 * Math.PI * i / nombreDeParticule;
+        let color =  getRandomColor();
+        if(masse < 50)
+        {
+            radius = generateNumber(50, 100);
+        }
+        else
+        {
+            radius = generateNumber(100, 200);
+        }
+        let x = canvas.getAttribute("width") / 2 + radius * Math.sin(ang);
+        let y = canvas.getAttribute("height") / 2 + radius * Math.cos(ang);
+        let p = new Particle(masse, x, y, color);
+        p.radius = masse / 20; // taille visuelle proportionnelle a la masse (masse 10-100 -> rayon 0.5-5)
+        let vitesse = Math.sqrt(particles[0].masse / radius); // vitesse orbitale circulaire v = sqrt(G*M/r), G=1, M = masse centrale
+        p.vx = -vitesse * Math.cos(ang);
+        p.vy = vitesse * Math.sin(ang);
+        p.draw();
+        particles.push(p);
     }
-    else
-    {
-        radius = generateNumber(100, 200);
-    }
-    let x = canvas.getAttribute("width") / 2 + radius * Math.sin(ang);
-    let y = canvas.getAttribute("height") / 2 + radius * Math.cos(ang);
-    let p = new Particle(masse, x, y, color);
-    let vitesse = Math.sqrt(particles[0].masse / radius); // vitesse orbitale circulaire v = sqrt(G*M/r), G=1, M = masse centrale
-    p.vx = -vitesse * Math.cos(ang);
-    p.vy = vitesse * Math.sin(ang);
-    p.draw();
-    particles.push(p);
 }
+
+initSimulation();
+
+// Bouton recommencer : arrete la simulation en cours et reinitialise les particules
+const Restartbouton = document.getElementById("Restartbouton");
+Restartbouton.onclick = function ()
+{
+    if(SimulationMode)
+    {
+        SimulationMode = false;
+        clearInterval(intervalID);
+    }
+    initSimulation();
+};
