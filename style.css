@@ -1,86 +1,157 @@
 /* Code CSS concu par King Lau et Sylvain Mazzoleni pour le projet web en L1S2 */
+/* Habillage « Cosmos profond » : on restyle la page autour de la simulation,
+   la physique et le rendu du canvas restent inchanges. */
 
 
+
+/* Variables du theme (couleurs, verre depoli, rayons) */
+:root
+{
+  /* Fond spatial */
+  --bg-0: #04050d;
+  --bg-1: #0a0a1e;
+
+  /* Accents */
+  --violet: #7c5cff;
+  --cyan: #39d8ff;
+  --cyan-soft: #8be9ff;
+  --rose: #ff5d8f;
+  --green: #56e39f;
+
+  /* Verre depoli du panneau de controle */
+  --panel-bg: rgba(18, 20, 44, 0.55);
+  --panel-bg-2: rgba(28, 24, 58, 0.45);
+  --panel-border: rgba(140, 160, 255, 0.22);
+  --panel-border-bright: rgba(160, 180, 255, 0.40);
+
+  /* Texte */
+  --text: #ecedff;
+  --text-dim: #a9add6;
+  --text-faint: #767aa6;
+
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow-panel: 0 18px 48px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
 
 /* Permet d'obtenir un rendu final visuellement beau et ergonmique */
 *
 {
     margin: 0px;
+    box-sizing: border-box;
 }
 
-/* Titre de la page web, grosse police centrer et couleur constraste avec le reste de la page */
+/* Titre de la page web : bandeau en degrade navy -> violet avec halo lumineux */
 #title
 {
-  padding: 10px;
-  margin-top: 0px;
-  margin-right: 0px;
-  margin-left: 0px;
-  margin-bottom: 10px;
+  padding: 18px 14px;
+  margin: 0px 0px 14px 0px;
   text-align: center;
-  background-color: #009DFF;
-  color: #FFFFFF;
-  font-family: sans-serif;
+  border-radius: var(--radius);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 1rem + 2.4vw, 2.6rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #f4f6ff;
+  background: linear-gradient(110deg, #1a1346 0%, #3a1d7a 48%, #16306e 100%);
+  border: 1px solid var(--panel-border);
+  box-shadow: var(--shadow-panel), 0 0 60px rgba(124, 92, 255, 0.25);
+  text-shadow: 0 0 14px rgba(57, 216, 255, 0.45), 0 0 30px rgba(124, 92, 255, 0.35);
 }
 
-/* Le corps de la page (body) */
+/* Le corps de la page (body) : fond spatial profond */
 body
 {
-  font-family: sans-serif;
-  background-color: #242121;
-  padding: 10px;
-  margin-bottom: 10px;
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 700px at 78% -10%, rgba(124, 92, 255, 0.18), transparent 60%),
+    radial-gradient(900px 600px at 12% 8%, rgba(57, 216, 255, 0.12), transparent 55%),
+    linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 55%, #020308 100%);
+  min-height: 100vh;
+  padding: 12px;
 }
 
 /* Pied de page */
 footer
-{ 	
+{
   text-align: center;
-  color: white;
-  margin: 10px;
+  color: var(--text-faint);
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  margin: 16px 8px 6px;
 }
 
-/* Pour centrer la zone d'affichage, 
-on a du crée un cadre au dessus de la zone d'affichage permettant de contenir ce que nous souhaitons centrer.
-On lui l'a donc mis en flexbox (display: flex) et avec la propriété (justify-content: center). 
-On crée dans cette zone un autre cadre qui va permettre de s'adapter en fonction du flexbox qui le contient, 
-on le met donc en "flexbox en-ligne" (display: inline-flex) qui contient le canvas, le panneau de controle, les commandes, tout ce que notre page auras de concret a realiser en soit.
-On défnit la position du canvas en relative (position: relative)
-On met en absolue (position: absolute) les commandes pour les regrouper en gaut à gauche de notre deuxième cadre */
+/* Pour centrer la zone d'affichage, on garde le cadre flexbox au dessus
+   de la zone d'affichage (display: flex + justify-content: center).
+   La zone d'affichage est en flexbox en-ligne (display: inline-flex) :
+   le panneau de controle est pose comme colonne a gauche du canvas
+   (order: -1), il n'est plus en absolu et ne masque donc plus les
+   particules. */
 
 /* Cadre/Centre de la zone d'animation */
 #cadre
 {
   display: flex;
   justify-content: center;
-  background: #242121;
-  color: #F0FFFF;
+  color: var(--text);
 }
 
-/* Zone d'affichage */
+/* Zone d'affichage : panneau de controle a gauche + canvas a droite */
 #zone_affichage
 {
   margin: 10px;
   display: inline-flex;
+  align-items: flex-start;
+  gap: 16px;
+  position: relative;
 }
 
 /* Le canvas qui contient les particules */
 #affichage{
-  border: 1px solid;
-  border-color: lightgray;
   position: relative;
+  border-radius: var(--radius);
+  border: 1px solid var(--panel-border);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.6),
+    0 0 80px rgba(57, 216, 255, 0.10);
 }
 
-/* Le panneau de controle */
+/* Le panneau de controle : carte en verre depoli, colonne a gauche du canvas */
 #panneauDeControle{
-  position: absolute;
-  display: inline-block;
-  width: 400px;
+  position: relative;
+  order: -1;
+  flex: none;
+  width: 320px;
+  background: linear-gradient(160deg, var(--panel-bg), var(--panel-bg-2));
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-panel);
+  padding: 6px 16px 16px;
+  transition: box-shadow 0.25s ease;
+}
+#panneauDeControle:hover{
+  box-shadow: var(--shadow-panel), 0 0 0 1px var(--panel-border-bright);
 }
 
-/* Choix de l'affiachage des controles */
+/* Choix de l'affiachage des controles : entete repliable */
 #Hidebouton{
-  margin: 15px
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 12px 4px 10px;
+  margin: 0px;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.18s ease;
 }
+#Hidebouton:hover{ color: var(--cyan-soft); }
 
 /* Permet d'afficher ou masquer les controles */
 #Controle{
@@ -90,56 +161,183 @@ On met en absolue (position: absolute) les commandes pour les regrouper en gaut 
 /* Titre du panneau de controle */
 h2
 {
-    background-color: rgba(125,125,125,.3);
-    font-size: large;
-    padding: 5px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.04em;
+    color: #ffffff;
+    padding: 8px 0px 10px 0px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+/* fine ligne lumineuse a droite du titre du panneau */
+h2::after
+{
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--panel-border-bright), transparent);
 }
 
 /* Texte indiquant le fonctionnement de la silmulation */
 #texteAdd
-{    
-    background-color: rgba(105, 105, 105, 0.5);
-    padding: 10px;
-    display: inline-block;
+{
+    background: rgba(8, 9, 24, 0.45);
+    border: 1px solid rgba(140, 160, 255, 0.12);
+    border-radius: var(--radius-sm);
+    padding: 13px 14px;
+    font-size: 0.86rem;
+    line-height: 1.5;
+    color: var(--text-dim);
+    display: block;
+}
+
+/* Lignes de reglage (masse et couleur) */
+#texteAdd > div
+{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
 }
 
 /* Style des labels (masses et couleurs) */
 #texteAdd label
 {
-    margin-top: 20px;
-    display: inline-block;
-    width: 30%;
+    width: 74px;
+    flex: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+}
+
+/* Slider de masse personnalise : rail degrade cyan -> violet, pouce lumineux */
+#slider{
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  min-width: 0;
+  height: 6px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--cyan), var(--violet));
+  outline: none;
+  cursor: pointer;
+}
+#slider::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: #eafcff;
+  border: 2px solid var(--cyan);
+  box-shadow: 0 0 18px rgba(57, 216, 255, 0.55);
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+#slider::-webkit-slider-thumb:hover{ transform: scale(1.18); }
+#slider::-moz-range-thumb{
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: #eafcff;
+  border: 2px solid var(--cyan);
+  box-shadow: 0 0 18px rgba(57, 216, 255, 0.55);
+  cursor: pointer;
 }
 
 /* Style de l'imput masse qui contient sa valeur */
 #masse{
+  width: 48px;
+  flex: none;
   border: none;
   background-color: rgba(0, 0, 0, 0);
-  color: white;
-  width: 50px;
-  font-size: large;
+  color: var(--cyan-soft);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-align: right;
+  text-shadow: 0 0 10px rgba(57, 216, 255, 0.35);
+}
+#masse:focus{ outline: none; }
+
+/* Selecteur de couleur des particules */
+#inputCouleur{
+  -webkit-appearance: none;
+  appearance: none;
+  width: 40px; height: 28px;
+  border: 1px solid var(--panel-border-bright);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  padding: 2px;
+  box-shadow: 0 0 12px rgba(124, 92, 255, 0.35);
+}
+#inputCouleur::-webkit-color-swatch-wrapper{ padding: 0; }
+#inputCouleur::-webkit-color-swatch{ border: none; border-radius: 6px; }
+#inputCouleur::-moz-color-swatch{ border: none; border-radius: 6px; }
+
+/* Boutons demarrer / stop : groupe */
+#Bouton
+{
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
 }
 
-/* Style des boutons par défaut*/
+/* Style des boutons par defaut */
 #Bouton input
 {
-    font-family: sans-serif;
-    margin-top: 10px;
-    margin-right: 5px;
-    padding: 5px;
-    font-size:large;
-    color: #242121;
-    background-color: yellowgreen;
+    flex: 1;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.92rem;
+    letter-spacing: 0.05em;
+    padding: 11px 10px;
+    border: none;
+    border-radius: 12px;
+    color: #07111a;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+/* Bouton demarrer : degrade cyan -> vert */
+#Startbouton
+{
+    background: linear-gradient(135deg, var(--cyan), var(--green));
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18), 0 6px 18px rgba(57, 216, 255, 0.35);
+}
+
+/* Bouton stop : degrade orange -> rose */
+#Stopbouton
+{
+    background: linear-gradient(135deg, #ff8f6b, var(--rose));
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18), 0 6px 18px rgba(255, 93, 143, 0.35);
 }
 
 /* Style des boutons lorsque la souris est dessus */
 #Bouton input:hover
 {
-    background-color: green;
+    transform: translateY(-2px);
+    filter: brightness(1.08);
 }
 
 /* Style des boutons pendant l'action "click" */
 #Bouton input:active
 {
-    background-color: lightblue;
+    transform: translateY(0);
+    filter: brightness(0.95);
+}
+
+/* Accessibilite : focus visible au clavier */
+#Bouton input:focus-visible
+{
+    outline: 2px solid var(--cyan-soft);
+    outline-offset: 2px;
+}
+
+/* Respect de la preference systeme : animations reduites */
+@media (prefers-reduced-motion: reduce)
+{
+    * { transition: none !important; }
 }

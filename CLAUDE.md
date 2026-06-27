@@ -41,5 +41,7 @@ Site statique de 3 fichiers, sans build. Faire des changements ciblés et minima
 
 ## Gotchas
 - Dans `calculDesMouvements`, la mise à jour vitesse/position est **imbriquée dans la boucle `j`** (intégration appliquée par interaction, pas une fois par pas). C'est le comportement actuel voulu — ne pas « réparer » sans accord.
+- Force = `G·mi·mj/(r²+softening²)` (G=1), puis accélération = `f/masse` → indépendante de la masse du corps (correct). Ne pas retirer la division par `masse`, ni la constante `softening` (borne la force quand `r→0`, évite les éjections).
+- Init orbital : vitesse circulaire képlérienne `v = √(particles[0].masse / r)`. Ne pas revenir à `v ∝ r` (casse les orbites circulaires).
 - `createBigParticule` crée le corps central fixe (`Move = false`, masse 3000) au centre; l'init ajoute `nombreDeParticule` particules en orbite.
 - Le texte du bouton est `↑ Masquer le controle` dans le HTML mais réécrit en `↑ Masquer les contrôles` par le JS.

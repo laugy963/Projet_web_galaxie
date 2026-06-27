@@ -18,6 +18,7 @@ let nombreDeParticule = 21; // Nombre de particules afficher au chargement de la
 let particles = []; // Tableau de toutes les particules creer
 let intervalID; // Permet de gerer l'activation et l'arret de la simulation
 let SimulationMode = false; // Permet de savoir si la simulation est en cour ou non
+const softening = 5; // adoucissement gravitationnel (px) : borne la force lors des rencontres tres proches (r -> 0)
 
 // Fonction permettant d'obtenir une couleur aleatoire
 function getRandomColor() 
@@ -103,7 +104,8 @@ Startbouton.onclick = function ()
         intervalID = setInterval(function()
         {
             calculDesMouvements(particles, 0.02);
-            ctx.fillStyle = "#222222";
+            ctx.shadowBlur = 0; // pas de halo sur l'effacement (sinon flou couteux sur tout le canvas)
+            ctx.fillStyle = "rgba(4,5,13,0.2)"; // effacement semi-transparent -> trainees orbitales (couleur du fond du theme)
             ctx.fillRect(0,0,canvas.width, canvas.height);
             for (let i = 0; i < particles.length; i++)
             {
@@ -157,6 +159,8 @@ class Particle
     {
         ctx.beginPath();
         ctx.fillStyle = this.couleur;
+        ctx.shadowBlur = this.radius; // halo lumineux proportionnel a la taille -> rendu "etoile"
+        ctx.shadowColor = this.couleur;
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2, true);
         ctx.closePath();
         ctx.fill();
@@ -210,8 +214,9 @@ function calculDesMouvements(particles, dt)
                 {
                     let dx = particles[j].x - particles[i].x;
                     let dy = particles[j].y - particles[i].y;
-                    let r = Math.sqrt(dx ** 2 + dy ** 2);
-                    let f = 1 * particles[j].masse / r ** 2;
+                    let r2 = dx ** 2 + dy ** 2 + softening ** 2; // distance au carre adoucie (Plummer) : pas de singularite quand r -> 0
+                    let r = Math.sqrt(r2);
+                    let f = 1 * particles[i].masse * particles[j].masse / r2; // vraie force de Newton F = G*mi*mj/(r^2+eps^2) (G=1)
                     particles[i].fx = particles[i].fx + f * dx / r;
                     particles[i].fy = particles[i].fy + f * dy / r;
                 }
@@ -260,8 +265,9 @@ for(let i = 1; i < nombreDeParticule; i++)
     let x = canvas.getAttribute("width") / 2 + radius * Math.sin(ang);
     let y = canvas.getAttribute("height") / 2 + radius * Math.cos(ang);
     let p = new Particle(masse, x, y, color);
-    p.vx = -0.01 * radius * Math.cos(ang);
-    p.vy = 0.01 * radius * Math.sin(ang);
+    let vitesse = Math.sqrt(particles[0].masse / radius); // vitesse orbitale circulaire v = sqrt(G*M/r), G=1, M = masse centrale
+    p.vx = -vitesse * Math.cos(ang);
+    p.vy = vitesse * Math.sin(ang);
     p.draw();
     particles.push(p);
 }
