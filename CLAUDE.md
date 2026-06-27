@@ -49,4 +49,5 @@ Site statique de 3 fichiers, sans build. Faire des changements ciblés et minima
 - Collision = fusion parfaitement inélastique (`gererCollisions`/`fusionner`) : conserve masse + quantité de mouvement, rayon à volume conservé `r=(r₁³+r₂³)^⅓` ; le corps fixe sinon le plus massif survit. Comportement voulu — ne pas revenir à « les deux explosent ».
 - `fusionner` **additionne** les masses → `Number(masse)` obligatoire (`slider.value` est une string ; sinon concaténation au lieu d'addition).
 - `sparks[]` + `spawnExplosion`/`dessineExplosions` = flash d'impact éphémère (pas de gravité), dessiné dans la boucle et vidé au Recommencer.
+- `stars[]` + `creerEtoiles`/`dessineEtoiles` = champ d'étoiles de fond fixes (décor pur, pas de gravité). Rayon 0.2–1 px, sans halo (`shadowBlur=0`), dessiné **après l'effacement et avant les planètes** dans la boucle ET dans `initSimulation`. Doit être redessiné chaque frame, sinon le fond semi-transparent (trainées) l'efface ; régénéré au Recommencer.
 - Le texte du bouton est `↑ Masquer le controle` dans le HTML mais réécrit en `↑ Masquer les contrôles` par le JS.
