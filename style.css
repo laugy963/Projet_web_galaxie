@@ -1,0 +1,145 @@
+/* Code CSS concu par King Lau et Sylvain Mazzoleni pour le projet web en L1S2 */
+
+
+
+/* Permet d'obtenir un rendu final visuellement beau et ergonmique */
+*
+{
+    margin: 0px;
+}
+
+/* Titre de la page web, grosse police centrer et couleur constraste avec le reste de la page */
+#title
+{
+  padding: 10px;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-left: 0px;
+  margin-bottom: 10px;
+  text-align: center;
+  background-color: #009DFF;
+  color: #FFFFFF;
+  font-family: sans-serif;
+}
+
+/* Le corps de la page (body) */
+body
+{
+  font-family: sans-serif;
+  background-color: #242121;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+/* Pied de page */
+footer
+{ 	
+  text-align: center;
+  color: white;
+  margin: 10px;
+}
+
+/* Pour centrer la zone d'affichage, 
+on a du crée un cadre au dessus de la zone d'affichage permettant de contenir ce que nous souhaitons centrer.
+On lui l'a donc mis en flexbox (display: flex) et avec la propriété (justify-content: center). 
+On crée dans cette zone un autre cadre qui va permettre de s'adapter en fonction du flexbox qui le contient, 
+on le met donc en "flexbox en-ligne" (display: inline-flex) qui contient le canvas, le panneau de controle, les commandes, tout ce que notre page auras de concret a realiser en soit.
+On défnit la position du canvas en relative (position: relative)
+On met en absolue (position: absolute) les commandes pour les regrouper en gaut à gauche de notre deuxième cadre */
+
+/* Cadre/Centre de la zone d'animation */
+#cadre
+{
+  display: flex;
+  justify-content: center;
+  background: #242121;
+  color: #F0FFFF;
+}
+
+/* Zone d'affichage */
+#zone_affichage
+{
+  margin: 10px;
+  display: inline-flex;
+}
+
+/* Le canvas qui contient les particules */
+#affichage{
+  border: 1px solid;
+  border-color: lightgray;
+  position: relative;
+}
+
+/* Le panneau de controle */
+#panneauDeControle{
+  position: absolute;
+  display: inline-block;
+  width: 400px;
+}
+
+/* Choix de l'affiachage des controles */
+#Hidebouton{
+  margin: 15px
+}
+
+/* Permet d'afficher ou masquer les controles */
+#Controle{
+  display: block;
+}
+
+/* Titre du panneau de controle */
+h2
+{
+    background-color: rgba(125,125,125,.3);
+    font-size: large;
+    padding: 5px;
+}
+
+/* Texte indiquant le fonctionnement de la silmulation */
+#texteAdd
+{    
+    background-color: rgba(105, 105, 105, 0.5);
+    padding: 10px;
+    display: inline-block;
+}
+
+/* Style des labels (masses et couleurs) */
+#texteAdd label
+{
+    margin-top: 20px;
+    display: inline-block;
+    width: 30%;
+}
+
+/* Style de l'imput masse qui contient sa valeur */
+#masse{
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  color: white;
+  width: 50px;
+  font-size: large;
+}
+
+/* Style des boutons par défaut*/
+#Bouton input
+{
+    font-family: sans-serif;
+    margin-top: 10px;
+    margin-right: 5px;
+    padding: 5px;
+    font-size:large;
+    color: #242121;
+    background-color: yellowgreen;
+}
+
+/* Style des boutons lorsque la souris est dessus */
+#Bouton input:hover
+{
+    background-color: green;
+}
+
+/* Style des boutons pendant l'action "click" */
+#Bouton input:active
+{
+    background-color: lightblue;
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+    <head>   
+		<title>Projet Programmation web1 </title>   <!-- Titre de l'onglet -->        
+		<meta charset = "utf-8"/><!-- Les accents français --> 
+		<link rel = "stylesheet" type="text/css" href="style.css"/> <!-- le CSS -->	
+		<meta name="viewport" content="width=device-width, initial-scale=1">    	
+   </head>
+
+	<body>
+
+		<!-- Titre principal -->	
+		<header>
+			<h1 id="title">Mécanique céleste</h1> 
+		</header>
+			
+		<!-- centre de la zone d'animation -->
+		<div id="cadre">
+			<!-- La zone d'affichage de l'animation -->
+			<div id="zone_affichage">
+				<!-- canvas contient les particules -->
+				<canvas id="affichage" width="800" height="600"></canvas>
+				<!-- Panneau de controle grouper -->
+				<div id="panneauDeControle">
+					<!-- Titre pour afficher/masquer les controles -->
+					<h3 id = "Hidebouton">↑ Masquer le controle</h3> 
+					<!-- Panneau de controle qui contient slider et color et permet de gerer la gestion afficher/masquer -->  
+					<div id="Controle"> 
+						<!-- Titre du panneau de controle -->           
+						<h2>Particules</h2>
+						<!-- Texte indiquant comment fonctionne la simulation -->
+						<div id="texteAdd">Pour ajouter des particules, double-cliquer dans le canvas. La particule ajoutée aura les propriétés définies ci-dessous.
+							<div> 
+								<!-- Input de la masse des particules a choisir -->
+								<label for="slider">Masse : </label>
+								<input id="slider" type="range" min="1" max="500" name="sliderMasse"/>
+								<input id="masse" type="text" value="250" name="textMasseParticule"/>
+							</div>
+							<div> 
+								<!-- Input de la couleurs des particules a choisir -->
+								<label for="couleur">Couleur : </label>
+								<input id="inputCouleur" type="color" name="couleur" id="couleur"/>
+							</div>
+						</div>
+					</div>			
+					<!-- Boutons de démarrage et arrêt de la simulation -->
+					<div id = "Bouton"> 
+						<input id="Startbouton" type="button" name="start" value="DÉMARRER"/>
+						<input id="Stopbouton" type="button" name="stop" value="STOP"/>
+					</div>
+				</div> 	
+			</div>				
+		</div> 
+		<!-- Pied de page -->
+		<footer>
+            <p> Programmation web 2020/2021 TP note by King Lau & Sylvain Mazzoleni <p>
+       	</footer>
+    </body>
+
+	<!-- Ajout de Jquery 3.6.0 -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<!-- Ajouts des scrits JavaScript a la fin du fichier pour permettre a la page de charger integralement avant de prendre les valeurs des elements necessaires -->
+	<script type="text/javascript" src="script.js"></script>
+
+</html>
