@@ -16,6 +16,7 @@ const Stopbouton = document.getElementById("Stopbouton");
 let nombreDeParticule = 21; // Nombre de particules afficher au chargement de la page
 let particles = []; // Tableau de toutes les particules creer
 let sparks = []; // etincelles d'explosion ephemeres (pur visuel, pas de gravite)
+let stars = []; // etoiles de fond fixes (pur decor, pas de gravite)
 let intervalID; // Permet de gerer l'activation et l'arret de la simulation
 let SimulationMode = false; // Permet de savoir si la simulation est en cour ou non
 const softening = 5; // adoucissement gravitationnel (px) : borne la force lors des rencontres tres proches (r -> 0)
@@ -36,6 +37,40 @@ function getRandomColor()
 function generateNumber(min, max)
 {
     return Math.floor((Math.random()*(max-min))+min);
+}
+
+// Genere un champ d'etoiles fixes reparties aleatoirement sur le canvas (decor de fond)
+function creerEtoiles()
+{
+    stars = [];
+    let nombreEtoiles = 140;
+    let w = canvas.getAttribute("width");
+    let h = canvas.getAttribute("height");
+    for(let i = 0; i < nombreEtoiles; i++)
+    {
+        stars.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            radius: Math.random() * 0.8 + 0.2, // 0.2 a 1.0 px : assez petit pour ne pas masquer les planetes
+            alpha: Math.random() * 0.5 + 0.3   // 0.3 a 0.8 : variation de luminosite -> impression de profondeur
+        });
+    }
+}
+
+// Dessine le champ d'etoiles de fond (redessine chaque frame, sinon le fond semi-transparent des trainees les estompe)
+function dessineEtoiles()
+{
+    ctx.shadowBlur = 0; // pas de halo : points nets et discrets
+    ctx.fillStyle = "#ffffff";
+    for(let i = 0; i < stars.length; i++)
+    {
+        let e = stars[i];
+        ctx.beginPath();
+        ctx.globalAlpha = e.alpha;
+        ctx.arc(e.x, e.y, e.radius, 0, Math.PI * 2);
+        ctx.fill();
+    }
+    ctx.globalAlpha = 1;
 }
 
 
@@ -108,6 +143,7 @@ Startbouton.onclick = function ()
             ctx.shadowBlur = 0; // pas de halo sur l'effacement (sinon flou couteux sur tout le canvas)
             ctx.fillStyle = "rgba(4,5,13,0.2)"; // effacement semi-transparent -> trainees orbitales (couleur du fond du theme)
             ctx.fillRect(0,0,canvas.width, canvas.height);
+            dessineEtoiles(); // etoiles de fond, derriere les planetes
             for (let i = 0; i < particles.length; i++)
             {
                 particles[i].draw();
@@ -372,6 +408,8 @@ function initSimulation()
     ctx.shadowBlur = 0;
     ctx.fillStyle = "rgba(4,5,13,1)"; // efface tout le canvas (fond du theme)
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    creerEtoiles();   // (re)genere le champ d'etoiles de fond
+    dessineEtoiles(); // les affiche derriere les planetes des le chargement
     slider.value = 250;
     masse.value = slider.value; // resynchronise la case masse avec le slider au (re)demarrage
     particles.push(createBigParticule());
